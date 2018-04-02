@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>兰信人事管理系统</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-treeview.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-table-fixed-columns.css" rel="stylesheet" />
+    <link href="css/webuploader.css" rel="stylesheet" />
+    <link href="css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+    <script src="js/third/vue-2.0.js" type="text/javascript"></script>
+    <script src="js/third/jquery-3.1.1.js" type="text/javascript"></script>
+    <script src="js/third/jquery.linq.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table-locale-all.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-treeview.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table-fixed-columns.js" type="text/javascript"></script>
+    <script src="js/third/webuploader.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-datepicker.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
+
+    <script src="js/app/upload.js" type="text/javascript"></script>
+    <link href="css/upload.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">
+        <header-component ref="headerComponent"></header-component>
+        <div class="content">
+            <contentleft-component ref="contentleftComponent" :plist="plist"></contentleft-component>
+            <div class="content-center">
+                <div class="reqedit container">
+                    <hr/>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    人力需求申请表
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="addtype">需求类型</label>
+                                                    <div class="col-sm-9">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="addtype" checked="checked" value="1" /> 增员
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="addtype" value="2" /> 补员
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="formDate">填表日期</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="formDate" placeholder="yyyy/mm/dd" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-3"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="corporation">申请部门</label>
+                                                    <div class="col-sm-9">
+                                                        <organization-component ref="organizationComponent"></organization-component>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="companySite">工作地点</label>
+                                                    <div class="col-sm-9">
+                                                        <select name="" id="companySite" class="form-control">
+                                                            <option v-for="item in master.companysites" :value="item.id">{{item.companysitename}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="suggestSalary">建议薪资</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="suggestSalary" placeholder="建议薪资" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="positionName">增补职位</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="positionName" placeholder="增补职位" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="addReason">增补理由</label>
+                                                    <div class="col-sm-9">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="addReason" checked="checked" value="1" /> 扩大编制
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="addReason" value="2" /> 辞职补充
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="arrivalDate">期望到岗日</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="arrivalDate" placeholder="yyyy/mm/dd" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form action="" class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="addCount">增补额（人）</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="addCount" placeholder="增补额" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div>应具资格条件</div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="sex">性别</label>
+                                                    <div class="col-sm-9">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="sex" checked="checked" value="0" /> 不限
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="sex" value="1" /> 男
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="sex" value="2" /> 女
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="education">学历</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="education" placeholder="学历" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="appearance">身高/外貌</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="appearance" placeholder="身高/外貌" value="不限" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="marryStatus">婚姻</label>
+                                                    <div class="col-sm-9">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="marryStatus" id="" checked="checked" value="0" /> 不限
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="marryStatus" id="" value="1" /> 未婚
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="marryStatus" id="" value="2" /> 已婚
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="major">专业</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="major" placeholder="专业" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="others">其他</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="others" placeholder="其他" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form action="" class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="age">年龄</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="age" placeholder="年龄" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="trait">性格</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="trait" placeholder="性格" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-1 control-label" for="experience">具备技能及工作经验</label>
+                                                    <div class="col-sm-11">
+                                                        <textarea class="form-control" rows="4" id="experience" placeholder="具备技能及工作经验">
+
+                                                        </textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-9">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-1 control-label" for="duty">岗位职责</label>
+                                                    <div class="col-sm-11">
+                                                        <textarea class="form-control" rows="4" id="duty" placeholder="岗位职责">
+                                                        </textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div>承认者</div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="proposer">申请人</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="proposer" placeholder="申请人" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="manager">总经理</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="manager" placeholder="总经理" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="director">分管负责人</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="director" placeholder="分管负责人" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="chairman">董事长</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="chairman" placeholder="董事长" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="hr">人力资源部门</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="hr" placeholder="人力资源部门" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm text-right">
+                                                    <div class="btn btn-default cancel">取消</div>
+                                                    <div class="btn btn-success save">保存</div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/component/header-component.js" type="text/javascript"></script>
+<script src="js/component/contentleft-component.js" type="text/javascript"></script>
+<script src="js/component/organization-component.js" type="text/javascript"></script>
+<script src="js/app/requirement-edit.js" type="text/javascript"></script>
+<script>
+    var $formDate = $("#formDate"),
+        $arrivalDate = $("#arrivalDate");
+    $(function () {
+        $formDate.datepicker({
+            format: "yyyy/mm/dd",
+            todayHighlight: true,
+            language: "zh-CN"
+        });
+        $arrivalDate.datepicker({
+            format: "yyyy/mm/dd",
+            todayHighlight: true,
+            language: "zh-CN"
+        });
+    });
+</script>
+
+</html>

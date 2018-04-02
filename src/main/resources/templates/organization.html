@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>兰信人事管理系统</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="css/jquery.treegrid.css" rel="stylesheet" />
+    <script src="js/third/vue-2.0.js" type="text/javascript"></script>
+    <script src="js/third/jquery-3.1.1.js" type="text/javascript"></script>
+    <script src="js/third/jquery.linq.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table-locale-all.min.js" type="text/javascript"></script>
+    <script src="js/third/jquery.treegrid.js" type="text/javascript"></script>
+    <script src="js/third/jquery.treegrid.bootstrap3.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table-treegrid.js" type="text/javascript"></script>
+    <link href="css/app.css" rel="stylesheet" />
+    <script src="js/data/organization.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="app">
+        <header-component ref="headerComponent"></header-component>
+        <div class="content">
+            <contentleft-component ref="contentleftComponent" :plist="plist"></contentleft-component>
+            <div class="content-center">
+                <div class="container">
+                    <hr/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="organization"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" orgid="" id="orgEdit">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    部门添加
+                </div>
+                <div class="modal-body">
+                    <form class="">
+                        <div class="form-group form-group-sm">
+                            <label class="control-label" for="orgname">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>组织名称</label>
+                            <input class="form-control" type="text" id="orgname" placeholder="组织名称" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn btn-default cancel">取消</div>
+                    <div class="btn btn-danger edit">保存</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" orgid="" id="orgDel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    你确定要删除么？
+                </div>
+                <div class="modal-footer">
+                    <div class="btn btn-default cancel">取消</div>
+                    <div class="btn btn-danger delete">删除</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/component/header-component.js" type="text/javascript"></script>
+<script src="js/component/contentleft-component.js" type="text/javascript"></script>
+<script src="js/app/organization.js" type="text/javascript"></script>
+<script>
+    /*<![CDATA[*/
+    function exchangeOrg(pid, id, rankno, exchange) {
+        var data = $table.bootstrapTable("getData");
+        var tmprankno;
+        if (exchange == 1) {
+            tmprankno = $.Enumerable.From(data).Where("$.parentid==" + pid + "&& $.rankno > " + rankno).Min("$.rankno");
+        } else {
+            tmprankno = $.Enumerable.From(data).Where("$.parentid==" + pid + "&& $.rankno < " + rankno).Max("$.rankno");
+        }
+        var id2 = $.Enumerable.From(data).Where("$.parentid==" + pid + "&& $.rankno == " + tmprankno).First().id;
+        var url = "./department/exchange",
+            para = {
+                departmentid1: id,
+                departmentid2: id2
+            };
+        $.post(url, para, function (result) {
+            $table.bootstrapTable("refresh", { url: "./department/all", pageNumber: 1 });
+        });
+    }
+    /*]]>*/
+    function deleteOrg(id) {
+        $("#orgDel").attr("orgid", id);
+        $('#orgDel').modal('show');
+    }
+    function addOrg(pid) {
+        $('#orgEdit .modal-header').text("部门添加");
+        $('#orgEdit input').val("");
+        $("#orgEdit").attr("pid", pid);
+        $("#orgEdit").attr("url", "./department/add");
+        $('#orgEdit').modal('show');
+    }
+    function editOrg(id, name) {
+        $('#orgEdit .modal-header').text("部门编辑");
+        $('#orgEdit input').val(name);
+        $("#orgEdit").attr("orgid", id);
+        $("#orgEdit").attr("url", "./department/update");
+        $('#orgEdit').modal('show');
+    }
+    function operationFormatter(value, row, index) {
+        var data = $table.bootstrapTable("getData");
+        var div = '';
+        var pid = row.parentid;
+        var maxRank = $.Enumerable.From(data).Where("$.parentid==" + pid).Max("$.rankno");
+        var minRank = $.Enumerable.From(data).Where("$.parentid==" + pid).Min("$.rankno");
+        if (row.rankno == minRank) {
+            div = div + '<div class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>';
+        } else {
+            div = div + '<div class="btn btn-xs btn-default" onclick="exchangeOrg(\'' + row.parentid + '\',\'' + row.id + '\',\'' + row.rankno + '\',-1)"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>';
+        }
+        if (row.rankno == maxRank) {
+            div = div + '<div class="btn btn-xs btn-default disabled"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></div>';
+        } else {
+            div = div + '<div class="btn btn-xs btn-default" onclick="exchangeOrg(\'' + row.parentid + '\',\'' + row.id + '\',\'' + row.rankno + '\',1)"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></div>';
+        }
+        div = div + '<div class="btn btn-xs btn-info" onclick="addOrg(\'' + row.id + '\')"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增一级部门</div><div class="btn btn-xs btn-info" onclick="editOrg(\'' + row.id + '\',\'' + row.departmentname + '\')"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>编辑</div>';
+        if (row.parentid != 0) {
+            var bool = $.Enumerable.From(data).Where("$.parentid==" + row.id).Any();
+            if (bool) {
+                div = div + '<div class="btn btn-xs btn-danger disabled"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除</div>';
+            } else {
+                div = div + '<div class="btn btn-xs btn-danger" onclick="deleteOrg(\'' + row.id + '\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除</div>';
+            }
+        }
+        return div;
+    }
+    var $table = $('#organization');
+    function getDepartment() {
+        $table.bootstrapTable("refresh", { url: "./department/all", pageNumber: 1 });
+    }
+    $(function () {
+        $("#orgEdit .cancel").click(function () {
+            $('#orgEdit').modal('hide');
+            getDepartment();
+        });
+        $("#orgEdit .edit").click(function () {
+            var url = $("#orgEdit").attr("url"),
+                para = {
+                    parentid: $("#orgEdit").attr("pid"),
+                    id: $("#orgEdit").attr("orgid"),
+                    departmentname: $('#orgEdit input').val()
+                };
+            $.post(url, para, function (result) {
+                $('#orgEdit').modal('hide');
+                getDepartment();
+            });
+        });
+        $("#orgDel .cancel").click(function () {
+            $('#orgDel').modal('hide');
+        });
+        $("#orgDel .delete").click(function () {
+            var url = "/department/delete",
+                para = {
+                    id: $("#orgDel").attr("orgid")
+                };
+            $.post(url, para, function (result) {
+                $('#orgDel').modal('hide');
+                getDepartment();
+            });
+        });
+        $table.bootstrapTable({
+            treeShowField: 'departmentname',
+            parentIdField: 'parentid',
+            columns: [{
+                field: 'departmentname',
+                title: '部门名称',
+                width: '300px'
+            }, {
+                field: 'operation',
+                title: '操作',
+                align: 'center',
+                formatter: 'operationFormatter'
+            }],
+            onLoadSuccess: function (data) {
+                console.log('load');
+                // jquery.treegrid.js
+                $table.treegrid({
+                    // initialState: 'collapsed',
+                    treeColumn: 0,
+                    // expanderExpandedClass: 'glyphicon glyphicon-minus',
+                    // expanderCollapsedClass: 'glyphicon glyphicon-plus',
+                    onChange: function () {
+                        $table.bootstrapTable('resetWidth');
+                    }
+                });
+            }
+        });
+        getDepartment();
+    });
+</script>
+
+</html>

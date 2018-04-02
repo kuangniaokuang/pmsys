@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>兰信人事管理系统</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-treeview.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-table-fixed-columns.css" rel="stylesheet" />
+    <link href="css/webuploader.css" rel="stylesheet" />
+    <link href="css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+    <script src="js/third/vue-2.0.js" type="text/javascript"></script>
+    <script src="js/third/jquery-3.1.1.js" type="text/javascript"></script>
+    <script src="js/third/jquery.linq.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-select.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table-locale-all.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-treeview.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-table-fixed-columns.js" type="text/javascript"></script>
+    <script src="js/third/webuploader.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-datepicker.min.js" type="text/javascript"></script>
+    <script src="js/third/bootstrap-datepicker.zh-CN.min.js" type="text/javascript"></script>
+
+    <script src="js/app/upload.js" type="text/javascript"></script>
+    <link href="css/upload.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">
+        <header-component ref="headerComponent"></header-component>
+        <div class="content">
+            <contentleft-component ref="contentleftComponent" :plist="plist"></contentleft-component>
+            <div class="content-center">
+                <div class="empedit container">
+                    <hr/>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    基本信息
+                                </div>
+                                <div class="panel-body">
+                                    <div>个人基本信息</div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <div id="uploader">
+                                                <div class="queueList">
+                                                    <div id="fileupload" class="placeholder">
+                                                        <img id="portrait" title="点击上传logo" src="imgs/image.png" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="staffName">
+                                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>姓名</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="staffName" placeholder="姓名" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="idCardNo">身份证号</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="idCardNo" placeholder="身份证号" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="mobileNo">手机号码</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="mobileNo" placeholder="手机号码" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="birthday">出生日期</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="birthday" placeholder="yyyy/mm/dd" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="sex">性别</label>
+                                                    <div class="col-sm-9">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="sex" id="male" checked="checked" value="1" /> 男
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="sex" id="female" value="2" /> 女
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="nativePlace">籍贯</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="nativePlace" placeholder="籍贯" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="livingAddress">现居住地</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="livingAddress" placeholder="现居住地址" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="nationality">
+                                                        民族</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="nationality" placeholder="民族" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="hukouType">户口类型</label>
+                                                    <div class="col-sm-9">
+                                                        <select name="" id="hukouType" class="form-control">
+                                                            <option v-for="item in master.hukous" :value="item.id">{{item.hukoutype}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="marryStatus">婚否</label>
+                                                    <div class="col-sm-9">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="marryStatus" id="" checked="checked" value="0" /> 未婚
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="marryStatus" id="" value="1" /> 已婚
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="politicalStatus">政治面貌</label>
+                                                    <div class="col-sm-9">
+                                                        <select name="" id="politicalStatus" class="form-control">
+                                                            <option v-for="item in master.politicals" :value="item.id">{{item.politicalstatus}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="highestEducation">学历</label>
+                                                    <div class="col-sm-9">
+                                                        <select name="" id="highestEducation" class="form-control">
+                                                            <option value="1">本科</option>
+                                                            <option value="2">研究生</option>
+                                                            <option value="3">专科</option>
+                                                            <option value="4">博士生</option>
+                                                            <option value="5">其他</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="school">
+                                                        毕业院校</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="school" placeholder="毕业院校" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="major">专业</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="major" placeholder="专业" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div>公司基本信息</div>
+                                    <br/>
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="staffNo">
+                                                        工号</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="staffNo" placeholder="工号" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="workingState">状态</label>
+                                                    <div class="col-sm-9">
+                                                        <select name="" id="workingState" class="form-control">
+                                                            <option value="0">离职</option>
+                                                            <option value="1">在职</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="corporation">部门</label>
+                                                    <div class="col-sm-9">
+                                                        <organization-component ref="organizationComponent"></organization-component>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="companySite">工作地点</label>
+                                                    <div class="col-sm-9">
+                                                        <select name="" id="companySite" class="form-control">
+                                                            <option v-for="item in master.companysites" :value="item.id">{{item.companysitename}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="profile">接收档案</label>
+                                                    <div class="col-sm-9">
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="profile" id="" checked="checked" value="0" /> 否
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="profile" id="" value="1" /> 是
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="contractType">合同形式</label>
+                                                    <div class="col-sm-9">
+                                                        <select name="" id="contractType" class="form-control">
+                                                            <option value="1">固定期限</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="contractPeriod">合同期（年）</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="contractPeriod" placeholder="劳动合同期" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="joinedDate">入职时间</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="joinedDate" placeholder="yyyy/mm/dd" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="contractDate">签合同时间</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="contractDate" placeholder="yyyy/mm/dd" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="positiveDate">转正时间</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="positiveDate" placeholder="yyyy/mm/dd" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="nowWorkingYears">司龄</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="nowWorkingYears" placeholder="司龄" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="positionName">职位</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="positionName" placeholder="职位" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="insideNo">内线座机</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="insideNo" placeholder="内线座机" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="outsideNo">外线座机</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="outsideNo" placeholder="外线座机" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <form action="" class="form-horizontal">
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="basic">基本工资</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="basic" placeholder="基本工资" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="bank">开户行</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="bank" placeholder="开户行" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="subBank">支行</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="subBank" placeholder="支行" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="cardNo">银行卡号</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="cardNo" placeholder="银行卡号" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="verifier">档案审核人</label>
+                                                    <div class="col-sm-9">
+                                                        <input class="form-control" type="text" id="verifier" placeholder="档案审核人" />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm">
+                                                    <label class="col-sm-3 control-label" for="staffRemark">备注</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea class="form-control" rows="3" id="staffRemark" placeholder="备注"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group form-group-sm text-right">
+                                                    <div class="btn btn-default cancel">取消</div>
+                                                    <div class="btn btn-success save">保存</div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/component/header-component.js" type="text/javascript"></script>
+<script src="js/component/contentleft-component.js" type="text/javascript"></script>
+<script src="js/component/organization-component.js" type="text/javascript"></script>
+<script src="js/app/employee-edit.js" type="text/javascript"></script>
+<script>
+    var $birthday = $("#birthday"),
+        $joineddate = $("#joinedDate"),
+        $contractdate = $("#contractDate"),
+        $positivedate = $("#positiveDate");
+    $(function () {
+        // 日期控件绑定
+        $birthday.datepicker({
+            format: "yyyy/mm/dd",
+            todayHighlight: true,
+            language: "zh-CN"
+        });
+        $joineddate.datepicker({
+            format: "yyyy/mm/dd",
+            todayHighlight: true,
+            language: "zh-CN"
+        });
+        $contractdate.datepicker({
+            format: "yyyy/mm/dd",
+            todayHighlight: true,
+            language: "zh-CN"
+        });
+        $positivedate.datepicker({
+            format: "yyyy/mm/dd",
+            todayHighlight: true,
+            language: "zh-CN"
+        });
+    });
+</script>
+
+</html>
